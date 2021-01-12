@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  become: yes
+
+  tasks:
+  - name: Cluster creation
+    community.aws.ecs_cluster:
+      name: default
+      state: present
+
+  - name: Cluster deletion
+    community.aws.ecs_cluster:
+      name: default
+      state: absent
+
+  - name: Wait for register
+    community.aws.ecs_cluster:
+      name: "{{ new_cluster }}"
+      state: has_instances
+      delay: 10
+      repeat: 10
+    register: task_output
